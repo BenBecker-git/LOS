@@ -1,201 +1,76 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lift Operator Simulator</title>
-  <meta name="description"
-    content="Run the lift. Keep guests safe. Lift Operator Simulator is a grounded sim of ski lift operations." />
+  <meta name="description" content="Run the lift. Keep guests safe. A grounded sim of ski lift operations." />
   <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #0f172a;
-      --muted: #94a3b8;
-      --text: #e2e8f0;
-      --accent: #38bdf8;
-      --accent2: #22d3ee;
-      --radius: 16px;
-      --shadow: 0 10px 30px rgba(2, 6, 23, .35);
+    :root{
+      --bg:#0b1020; --panel:#0f172a; --muted:#94a3b8; --text:#e2e8f0;
+      --accent:#38bdf8; --accent2:#22d3ee; --radius:16px;
+      --shadow:0 10px 30px rgba(2,6,23,.35);
     }
-
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc;
-        --panel: #ffffff;
-        --muted: #64748b;
-        --text: #0f172a;
-        --shadow: 0 10px 30px rgba(15, 23, 42, .08)
-      }
+    @media (prefers-color-scheme: light){
+      :root{--bg:#f8fafc;--panel:#ffffff;--muted:#64748b;--text:#0f172a;--shadow:0 10px 30px rgba(15,23,42,.08)}
     }
-
-    * {
-      box-sizing: border-box
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:radial-gradient(1200px 1200px at 80% -10%, rgba(56,189,248,.12), transparent 60%), var(--bg);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      line-height:1.5;
     }
-
-    html,
-    body {
-      height: 100%
-    }
-
-    body {
-      margin: 0;
-      background: radial-gradient(1200px 1200px at 80% -10%, rgba(56, 189, 248, .12), transparent 60%), var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      line-height: 1.5
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none
-    }
-
-    .container {
-      max-width: 1100px;
-      margin-inline: auto;
-      padding: 24px
-    }
-
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin-inline:auto;padding:24px}
     /* nav */
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{font-weight:700}
+    .navlinks{display:flex;gap:18px}
+    .nav-cta{display:flex;gap:10px;align-items:center}
+    .btn{
+      display:inline-block;padding:12px 16px;border-radius:12px;
+      border:1px solid rgba(148,163,184,.2);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow:var(--shadow);transition:transform .08s ease
     }
-
-    .brand {
-      font-weight: 700
-    }
-
-    .navlinks {
-      display: flex;
-      gap: 18px
-    }
-
-    .nav-cta {
-      display: flex;
-      gap: 10px;
-      align-items: center
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, .2);
-      background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-      box-shadow: var(--shadow);
-      transition: transform .08s ease
-    }
-
-    .btn:hover {
-      transform: translateY(-1px)
-    }
-
-    .btn.primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #002233;
-      border: none;
-      font-weight: 700
-    }
-
-    .btn.ghost {
-      background: transparent
-    }
-
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#002233;border:none;font-weight:700}
+    .btn.ghost{background:transparent}
+    .mobile{display:none}
     /* hero */
-    .hero {
-      padding: 72px 0 40px
-    }
+    .hero{padding:72px 0 40px}
+    .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:32px}
+    .eyebrow{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+    h1{font-size:clamp(2rem,1.4rem + 2.5vw,3.25rem);line-height:1.1;margin:.35em 0}
+    .lede{font-size:1.1rem;color:var(--muted);max-width:60ch}
+    .panel{background:var(--panel);border:1px solid rgba(148,163,184,.15);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .cover{aspect-ratio:16/10;width:100%;object-fit:cover;border-radius:var(--radius)}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    /* sections */
+    .section{padding:40px 0}
+    .footer{padding:46px 0 60px;color:var(--muted);font-size:.95rem}
+    .visually-hidden{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 32px
-    }
-
-    .eyebrow {
-      color: var(--accent);
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      font-size: .8rem
-    }
-
-    h1 {
-      font-size: clamp(2rem, 1.4rem + 2.5vw, 3.25rem);
-      line-height: 1.1;
-      margin: .35em 0
-    }
-
-    .lede {
-      font-size: 1.1rem;
-      color: var(--muted);
-      max-width: 60ch
-    }
-
-    .panel {
-      background: var(--panel);
-      border: 1px solid rgba(148, 163, 184, .15);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow)
-    }
-
-    .cover {
-      aspect-ratio: 16/10;
-      width: 100%;
-      object-fit: cover;
-      border-radius: var(--radius)
-    }
-
-    .cta-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 22px
-    }
-
-    /* newsletter */
-    .section {
-      padding: 40px 0
-    }
-
-    .footer {
-      padding: 46px 0 60px;
-      color: var(--muted);
-      font-size: .95rem
-    }
-
-    .mobile {
-      display: none
-    }
-
-    .visually-hidden {
-      position: absolute;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden
-    }
-
-    @media (max-width:900px) {
-      .hero-grid {
-        grid-template-columns: 1fr
-      }
-
-      .navlinks {
-        display: none
-      }
-
-      .mobile {
-        display: block
-      }
+    /* mobile <= 640px */
+    @media (max-width:640px){
+      .container{padding:16px}
+      .navlinks{display:none}
+      .nav-cta .btn{display:none}
+      .mobile{display:inline-block}
+      .mobile-menu{display:none;flex-direction:column;gap:10px;padding:12px;margin-top:8px;border-radius:12px;background:var(--panel);border:1px solid rgba(148,163,184,.15)}
+      .hero{padding:32px 0 20px}
+      h1{font-size:2rem}
+      .hero-grid{grid-template-columns:1fr}
+      .hero-media{display:none}
+      .cta-row{display:block}
+      .cta-grid{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
-
 <body>
   <header class="container" role="banner">
     <nav class="nav" aria-label="Main navigation">
@@ -211,6 +86,13 @@
         <button class="btn ghost mobile" id="menuBtn" aria-label="Open menu">Menu</button>
       </div>
     </nav>
+    <div id="mobileMenu" class="mobile-menu container" role="navigation" aria-label="Mobile">
+      <a href="#about">About</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="#faq">FAQ</a>
+      <a href="#wishlist">Wishlist</a>
+      <a href="#demo">Play Demo</a>
+    </div>
   </header>
 
   <main>
@@ -219,14 +101,15 @@
         <div>
           <div class="eyebrow">Management Sim • Snow Ops</div>
           <h1>Run the lift. Keep guests safe.</h1>
-          <p class="lede">Operate a ski lift. Maintain the ramp, monitor controls and gates, manage guest flow, and
-            prioritize safety.</p>
+          <p class="lede">Operate a ski lift. Maintain the ramp, monitor controls and gates, manage guest flow, and prioritize safety.</p>
           <div class="cta-row">
-            <a class="btn primary" href="#wishlist">Wishlist on Steam</a>
-            <a class="btn" href="#demo">Download Demo</a>
+            <div class="cta-grid">
+              <a class="btn primary" href="#wishlist">Wishlist on Steam</a>
+              <a class="btn" href="#demo">Download Demo</a>
+            </div>
           </div>
         </div>
-        <div class="panel" style="padding:12px">
+        <div class="panel hero-media" style="padding:12px">
           <img class="cover" src="/assets/cover.jpg" alt="Chairlift ramp with guests loading" loading="lazy" />
         </div>
       </div>
@@ -235,12 +118,10 @@
     <section id="newsletter" class="container section">
       <div class="panel" style="padding:20px">
         <h2>Get build updates</h2>
-        <p class="lede" style="max-width:50ch">Stay current on the changelog, new builds, and playtest calls. No spam.
-        </p>
+        <p class="lede" style="max-width:50ch">Stay current on the changelog, new builds, and playtest calls. No spam.</p>
         <form id="signup" class="cta-row" action="#" method="post" onsubmit="return false">
           <label for="email" class="visually-hidden">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" required
-            style="padding:12px 14px; border-radius:12px; border:1px solid rgba(148,163,184,.25); background:transparent; color:var(--text)" />
+          <input id="email" name="email" type="email" placeholder="you@example.com" required style="padding:12px 14px; border-radius:12px; border:1px solid rgba(148,163,184,.25); background:transparent; color:var(--text)" />
           <button class="btn primary" type="submit">Subscribe</button>
           <p id="msg" role="status" aria-live="polite" style="margin:0 0 0 8px; color:var(--muted)"></p>
         </form>
@@ -265,17 +146,22 @@
   </footer>
 
   <script>
+    // year
     document.getElementById('year').textContent = new Date().getFullYear();
-    // simple mobile menu toggle
+
+    // mobile menu
     const menuBtn = document.getElementById('menuBtn');
-    if (menuBtn) {
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
       menuBtn.addEventListener('click', () => {
-        const links = document.querySelector('.navlinks');
-        links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+        const shown = mobileMenu.style.display === 'flex';
+        mobileMenu.style.display = shown ? 'none' : 'flex';
       });
     }
+
     // fake newsletter submit
-    document.getElementById('signup').addEventListener('submit', () => {
+    const form = document.getElementById('signup');
+    form.addEventListener('submit', () => {
       const email = document.getElementById('email');
       const msg = document.getElementById('msg');
       msg.textContent = 'Thanks. Check your inbox.';
@@ -283,5 +169,4 @@
     });
   </script>
 </body>
-
 </html>
