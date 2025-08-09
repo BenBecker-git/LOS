@@ -54,16 +54,58 @@
       .hero-grid{grid-template-columns:1fr}
     }
 
-    /* mobile */
-    @media (max-width:640px){
-      /* larger safe padding on phones */
-      .container{padding-left:max(32px, env(safe-area-inset-left) + 20px);padding-right:max(32px, env(safe-area-inset-right) + 20px)}
-      h1{font-size:1.85rem}
-      .hero{padding:24px 0 24px} /* reduced top gap */
-      .panel img.cover{display:none}
-      /* card look for hero text */
-      .hero-card{background:var(--panel);border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:16px}
+   /* mobile */
+  @media (max-width:640px){
+    /* larger safe padding on phones */
+    .container {
+      padding-left: max(32px, env(safe-area-inset-left) + 20px);
+      padding-right: max(32px, env(safe-area-inset-right) + 20px);
     }
+  
+    h1 {
+      font-size: 1.85rem;
+    }
+  
+    /* smaller gap from top */
+    .hero {
+      padding: 16px 0 24px;
+    }
+  
+    .panel img.cover {
+      display: none;
+    }
+
+  /* card look for hero text */
+  .hero-card {
+    background: var(--panel);
+    border: 1px solid rgba(148,163,184,.15);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  /* newsletter form side-by-side */
+  #signup {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  #signup input[type="email"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(148,163,184,.25);
+    background: transparent;
+    color: var(--text);
+  }
+
+  #signup button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}
 
     /* desktop reset for hero card */
     .hero-card{background:transparent;border:none;padding:0}
