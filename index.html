@@ -120,7 +120,7 @@
           <p class="lede" style="max-width:52ch;margin:6px 0 0 0">
             Stay current on the changelog, new builds, and playtest calls. No spam.
           </p>
-          <form class="row" onsubmit="return false">
+         <form class="row" action="/api/subscribe" method="POST">
             <label class="visually-hidden" for="email">Email</label>
             <input id="email" name="email" type="email" placeholder="you@example.com" required />
             <button class="btn primary" type="submit">Subscribe</button>
