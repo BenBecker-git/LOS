@@ -1,0 +1,6 @@
+{
+  "name": "los-site",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@upstash/redis": "latest" }
+}
