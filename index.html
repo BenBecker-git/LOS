@@ -41,10 +41,10 @@
     .visually-hidden{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
     @media (max-width:900px){
       .hero-grid{grid-template-columns:1fr}
-      .navlinks{display:none}
-      .mobile{display:block}
+      .navlinks,.nav-cta{display:none}
     }
     @media (max-width:640px){
+      .container{padding:0 32px}
       h1{font-size:1.75rem}
       .hero{padding:48px 0 24px}
       .panel img.cover{display:none}
@@ -55,15 +55,6 @@
   <header class="container" role="banner">
     <nav class="nav" aria-label="Main navigation">
       <span class="brand">Lift Operator Simulator</span>
-      <div class="navlinks" role="navigation">
-        <a href="#about">About</a>
-        <a href="#newsletter">Newsletter</a>
-        <a href="#faq">FAQ</a>
-      </div>
-      <div class="nav-cta">
-        <a class="btn ghost" href="#wishlist">Wishlist</a>
-        <a class="btn primary" href="#demo">Play Demo</a>
-      </div>
     </nav>
   </header>
 
