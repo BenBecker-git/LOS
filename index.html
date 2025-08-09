@@ -1,352 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Lift Operator Simulator</title>
-    <style>
-        :root {
-            --g1: #04192e;
-            --g2: #020f1d;
-            --text: #e2e8f0;
-            --muted: #9fb0c2;
-            --panel: #0f172a;
-            --accent: #38bdf8;
-            --accent2: #22d3ee;
-            --border: rgba(148, 163, 184, .18);
-            --radius: 16px;
-            --shadow: 0 10px 30px rgba(2, 6, 23, .35);
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#020f1d" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>Lift Operator Simulator</title>
+<style>
+  :root{
+    --g1:#04192e; --g2:#020f1d; --text:#e2e8f0; --muted:#9fb0c2;
+    --panel:#0f172a; --accent:#38bdf8; --accent2:#22d3ee; --border:rgba(148,163,184,.18);
+    --radius:16px; --shadow:0 10px 30px rgba(2,6,23,.35);
+  }
 
-        /* full-page gradient */
-        html {
-            min-height: 100%;
-            background: linear-gradient(to bottom, var(--g1), var(--g2)) fixed
-        }
+  /* full-page gradient + dark overscroll */
+  html{
+    min-height:100%;
+    background:linear-gradient(to bottom,var(--g1),var(--g2)) fixed;
+    background-color:var(--g2);
+  }
+  html,body{background-color:var(--g2)}
+  body{
+    min-height:100%; margin:0; background:transparent; color:var(--text);
+    font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  }
 
-        body {
-            min-height: 100%;
-            margin: 0;
-            background: transparent;
-            color: var(--text);
-            font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif
-        }
+  .container{max-width:1100px;margin:0 auto;
+    padding-left:clamp(16px,5vw,48px);padding-right:clamp(16px,5vw,48px)}
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding-left: clamp(16px, 5vw, 48px);
-            padding-right: clamp(16px, 5vw, 48px)
-        }
+  header{padding:18px 0}
+  .brand{font-size:1rem;font-weight:700;white-space:nowrap}
 
-        header {
-            padding: 18px 0
-        }
+  .hero{padding:48px 0}
+  .eyebrow{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}
+  h1{margin:.35em 0;line-height:1.1;font-size:clamp(2rem,1.2rem + 3vw,3.2rem);font-weight:800}
+  .lede{max-width:60ch;color:var(--muted)}
+  .cta{display:flex;gap:12px;margin-top:22px}
+  .btn{display:inline-block;padding:12px 18px;border-radius:14px;border:1px solid var(--border);
+       background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));text-decoration:none;color:var(--text)}
+  .btn.primary{border:none;color:#002033;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
 
-        .brand {
-            font-size: 1rem;
-            font-weight: 700;
-            white-space: nowrap
-        }
+  /* Devlog dropdown */
+  details.devlog{max-width:680px;margin-top:40px}
+  details.devlog>summary{
+    list-style:none;cursor:pointer;user-select:none;outline:none;padding:10px 0;
+    font-size:1.25rem;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+  details.devlog>summary::after{content:"▸";font-size:1.5rem;font-weight:700;display:inline-block;transition:transform .2s}
+  details.devlog[open]>summary::after{transform:rotate(90deg)}
+  .log{list-style:none;margin:0;padding:0;border-left:2px solid rgba(148,163,184,.18)}
+  .log li{position:relative;padding:16px 0 16px 18px}
+  .log li::before{content:"";position:absolute;left:-6px;top:28px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .log time{display:inline-block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+  .log h3{margin:.1em 0 .2em;font-size:1.05rem}
+  .log p{margin:0;color:var(--muted)}
 
-        .hero {
-            padding: 48px 0
-        }
+  /* Newsletter card */
+  .card{padding:20px;border-radius:16px;background:var(--panel);
+        border:1px solid var(--border);box-shadow:var(--shadow);max-width:420px}
+  input[type="email"]{flex:1 1 260px;min-width:0;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text)}
+  .card h2{text-align:center}
 
-        .eyebrow {
-            color: var(--accent);
-            font-weight: 700;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            font-size: .8rem
-        }
+  /* Bottom row: newsletter + FAQ side-by-side */
+  .bottom-section{
+    display:flex; gap:24px; flex-wrap:wrap; justify-content:center; align-items:flex-start; margin-top:48px;
+  }
+  .bottom-section .card,
+  .bottom-section .faq{flex:1 1 320px; max-width:420px}
 
-        h1 {
-            margin: .35em 0;
-            line-height: 1.1;
-            font-size: clamp(2rem, 1.2rem + 3vw, 3.2rem);
-            font-weight: 800
-        }
+  /* FAQ bubbles */
+  .faq h2{margin:0 0 12px;font-size:1.25rem;text-align:center}
+  .faq details{
+    background:var(--panel);border:1px solid rgba(148,163,184,.15);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:16px
+  }
+  .faq details+details{margin-top:12px}
+  .faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;font-weight:700}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::before{content:"▸";font-size:1.1rem;font-weight:700;transition:transform .2s}
+  .faq details[open] summary::before{transform:rotate(90deg)}
+  .faq p{margin:12px 0 0;color:var(--muted)}
 
-        .lede {
-            max-width: 60ch;
-            color: var(--muted)
-        }
-
-        .cta {
-            display: flex;
-            gap: 12px;
-            margin-top: 22px
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 18px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
-            text-decoration: none;
-            color: var(--text)
-        }
-
-        .btn.primary {
-            border: none;
-            color: #002033;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent), var(--accent2))
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            margin-top: 12px
-        }
-
-        /* Devlog dropdown */
-        details.devlog {
-            max-width: 680px;
-            margin-top: 40px
-        }
-
-        details.devlog>summary {
-            list-style: none;
-            cursor: pointer;
-            user-select: none;
-            outline: none;
-            padding: 10px 0;
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px
-        }
-
-        details.devlog>summary::after {
-            content: "▸";
-            font-size: 1.5rem;
-            font-weight: 700;
-            display: inline-block;
-            transition: transform .2s
-        }
-
-        details.devlog[open]>summary::after {
-            transform: rotate(90deg)
-        }
-
-        .log {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            border-left: 2px solid rgba(148, 163, 184, .18)
-        }
-
-        .log li {
-            position: relative;
-            padding: 16px 0 16px 18px
-        }
-
-        .log li::before {
-            content: "";
-            position: absolute;
-            left: -6px;
-            top: 28px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent)
-        }
-
-        .log time {
-            display: inline-block;
-            font-size: .85rem;
-            color: var(--muted);
-            margin-bottom: 4px
-        }
-
-        .log h3 {
-            margin: .1em 0 .2em;
-            font-size: 1.05rem
-        }
-
-        .log p {
-            margin: 0;
-            color: var(--muted)
-        }
-
-        /* Newsletter card */
-        .card {
-            padding: 20px;
-            border-radius: 16px;
-            background: var(--panel);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            max-width: 420px
-        }
-
-        input[type="email"] {
-            flex: 1 1 260px;
-            min-width: 0;
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: transparent;
-            color: var(--text)
-        }
-
-        .card h2 {
-            text-align: center
-        }
-
-        /* Bottom row: newsletter + FAQ side-by-side */
-        .bottom-section{
-  display:flex;
-  gap:24px;
-  flex-wrap:wrap;
-  justify-content:center;
-  align-items:flex-start; /* ← stops newsletter from stretching */
-  margin-top:48px;
-}
-
-        .bottom-section .card,
-        .bottom-section .faq {
-            flex: 1 1 320px;
-            max-width: 420px
-        }
-
-        /* FAQ bubbles */
-
-        .faq h2 {
-            margin: 0 0 12px;
-            font-size: 1.25rem;
-            text-align: center
-        }
-
-        .faq details {
-            background: var(--panel);
-            border: 1px solid rgba(148, 163, 184, .15);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 16px
-        }
-
-        .faq details+details {
-            margin-top: 12px
-        }
-
-        .faq summary {
-            list-style: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 700
-        }
-
-        .faq summary::-webkit-details-marker {
-            display: none
-        }
-
-        .faq summary::before {
-            content: "▸";
-            font-size: 1.1rem;
-            font-weight: 700;
-            transition: transform .2s
-        }
-
-        .faq details[open] summary::before {
-            transform: rotate(90deg)
-        }
-
-        .faq p {
-            margin: 12px 0 0;
-            color: var(--muted)
-        }
-
-        /* footer */
-        .footer {
-            padding: 40px 0;
-            color: var(--muted);
-            font-size: .95rem;
-            text-align: center
-        }
-    </style>
+  /* footer */
+  .footer{padding:40px 0;color:var(--muted);font-size:.95rem;text-align:center}
+</style>
 </head>
-
 <body>
-    <header class="container">
-        <div class="brand">Lift Operator Simulator</div>
-    </header>
+  <header class="container">
+    <div class="brand">Lift Operator Simulator</div>
+  </header>
 
-    <main class="container">
-        <section class="hero">
-            <div class="eyebrow">Management Sim • Snow Ops</div>
-            <h1>Run the lift. Keep guests safe.</h1>
-            <p class="lede">Operate a Ski Lift. Maintain the ramp, monitor controls and gates, manage guest flow, and
-                Keep Safety First.</p>
-            <div class="cta"><a class="btn" href="#demo">Download Demo</a></div>
+  <main class="container">
+    <section class="hero">
+      <div class="eyebrow">Management Sim • Snow Ops</div>
+      <h1>Run the lift. Keep guests safe.</h1>
+      <p class="lede">Operate a ski lift. Maintain the ramp, monitor controls and gates, manage guest flow, and keep safety first.</p>
+      <div class="cta"><a class="btn" href="#demo">Download Demo</a></div>
 
-            <details class="devlog">
-                <summary>Dev Log</summary>
-                <ul class="log">
-                    <li>
-                        <time datetime="2025-08-09">Aug 9, 2025</time>
-                        <h3>Development Started</h3>
-                        <p>Official development of Lift Operator Simulator is underway!</p>
-                    </li>
+      <details class="devlog">
+        <summary>Dev Log</summary>
+        <ul class="log">
+          <li>
+            <time datetime="2025-08-09">Aug 9, 2025</time>
+            <h3>Development Started</h3>
+            <p>Official development of Lift Operator Simulator is underway!</p>
+          </li>
+        </ul>
+      </details>
 
-                </ul>
-            </details>
+      <!-- Bottom row: Newsletter (left) + FAQ (right) -->
+      <section class="bottom-section">
+        <!-- Newsletter -->
+        <div class="card">
+          <h2>Get build updates</h2>
+          <p class="lede" style="max-width:52ch;margin:6px 0 0 0">
+            Stay current on the changelog, new builds, and playtest calls. No spam.
+          </p>
+          <form class="row" onsubmit="return false">
+            <label class="visually-hidden" for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            <button class="btn primary" type="submit">Subscribe</button>
+          </form>
+        </div>
 
-            <!-- Bottom row: Newsletter (left) + FAQ (right) -->
-            <section class="bottom-section">
-                <!-- Newsletter -->
-                <div class="card">
-                    <h2>Get build updates</h2>
-                    <p class="lede" style="max-width:52ch;margin:6px 0 0 0">
-                        Stay current on the changelog, new builds, and playtest calls. No spam.
-                    </p>
-                    <form class="row" onsubmit="return false">
-                        <label class="visually-hidden" for="email">Email</label>
-                        <input id="email" name="email" type="email" placeholder="you@example.com" required />
-                        <button class="btn primary" type="submit">Subscribe</button>
-                    </form>
-                </div>
-
-                <!-- FAQ -->
-                <section class="faq">
-                    <h2>FAQ</h2>
-                    <details>
-                        <summary>When is release?</summary>
-                        <p>Targeting 2026. With access to an early demo available now.</p>
-                    </details>
-                    <details>
-                        <summary>Which platforms?</summary>
-                        <p>Windows and macOS, with controller support.</p>
-                    </details>
-                </section>
-            </section>
+        <!-- FAQ -->
+        <section class="faq">
+          <h2>FAQ</h2>
+          <details>
+            <summary>When is release?</summary>
+            <p>Targeting 2026. With access to an early demo available now.</p>
+          </details>
+          <details>
+            <summary>Which platforms?</summary>
+            <p>Windows and macOS, with controller support.</p>
+          </details>
         </section>
-    </main>
+      </section>
+    </section>
+  </main>
 
-    <footer class="container footer">
-        © 2025 Lift Ops Sim. All rights reserved.
-    </footer>
+  <footer class="container footer">
+    © 2025 Lift Ops Sim. All rights reserved.
+  </footer>
 
-    <style>
-        .visually-hidden {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden
-        }
-    </style>
-    <script>
-        document.querySelector('form').addEventListener('submit', () => { document.getElementById('email').value = ''; alert('Subscribed'); });
-    </script>
+  <style>.visually-hidden{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}</style>
+  <script>
+    document.querySelector('form').addEventListener('submit',()=>{document.getElementById('email').value='';alert('Subscribed');});
+  </script>
 </body>
-
 </html>
+
