@@ -22,7 +22,6 @@
     .container{max-width:1100px;margin-inline:auto;padding:0 24px}
 
     /* header */
-    header{position:relative;z-index:1}
     .nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:16px}
     .brand{font-weight:700}
     .navlinks{display:flex;gap:18px}
@@ -63,7 +62,6 @@
 
     /* mobile */
     @media (max-width:640px){
-      /* safe padding and compact spacing */
       .container{padding-left:max(32px, env(safe-area-inset-left) + 20px);padding-right:max(32px, env(safe-area-inset-right) + 20px)}
       .navlinks,.nav-cta{display:none}
       h1{font-size:1.85rem}
@@ -73,7 +71,7 @@
       .section{padding:24px 0}
     }
 
-    /* desktop reset for hero card */
+    /* desktop reset */
     .hero-card{background:transparent;border:none;padding:0}
   </style>
 </head>
@@ -106,7 +104,7 @@
           </div>
         </div>
         <div class="panel" style="padding:12px">
-          <img class="cover" src="/assets/cover.jpg" alt="Chairlift ramp with guests loading" loading="lazy" />
+          <img class="cover" src="/assets/cover.png" alt="Chairlift ramp with guests loading" loading="lazy" />
         </div>
       </div>
     </section>
