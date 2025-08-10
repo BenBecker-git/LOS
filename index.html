@@ -166,12 +166,12 @@
       if (!res.ok) throw new Error(await res.text());
 
       msg.style.color = "limegreen";
-      msg.textContent = "✅ You've been added!";
+      msg.textContent = "You've been added!";
       msg.style.display = "block";
       form.reset();
     } catch (err) {
       msg.style.color = "crimson";
-      msg.textContent = "❌ Could not subscribe. Try again.";
+      msg.textContent = "Could not subscribe. Try again.";
       msg.style.display = "block";
     }
   });
