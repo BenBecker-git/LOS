@@ -120,11 +120,12 @@
           <p class="lede" style="max-width:52ch;margin:6px 0 0 0">
             Stay current on the changelog, new builds, and playtest calls. No spam.
           </p>
-        <form id="subscribe-form" class="row">
-        <label class="visually-hidden" for="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="you@example.com" required />
-        <button class="btn primary" type="submit">Subscribe</button>
-      </form>
+       <form id="subscribe-form" class="row">
+  <label class="visually-hidden" for="email">Email</label>
+  <input id="email" name="email" type="email" placeholder="you@example.com" required />
+  <button class="btn primary" type="submit">Subscribe</button>
+</form>
+<p id="subscribe-message" style="margin-top:8px;display:none;color:#9fb0c2"></p>
         </div>
 
         <!-- FAQ -->
@@ -148,30 +149,30 @@
   </footer>
 
   <style>.visually-hidden{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}</style>
-  <script>
-  document.getElementById("subscribe-form").addEventListener("submit", async function(e) {
-    e.preventDefault(); // stop form from reloading page
+ <script>
+  const form = document.getElementById("subscribe-form");
+  const msg  = document.getElementById("subscribe-message");
 
-    const email = document.getElementById("email").value;
-    const messageEl = document.getElementById("subscribe-message");
-    
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.style.display = "none";
+
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email })
+        body: new FormData(form)
       });
 
-      if (res.ok) {
-        messageEl.textContent = "You've been added!";
-        messageEl.style.display = "block";
-        this.reset();
-      } else {
-        throw new Error("Failed to subscribe");
-      }
+      if (!res.ok) throw new Error(await res.text());
+
+      msg.style.color = "limegreen";
+      msg.textContent = "✅ You've been added!";
+      msg.style.display = "block";
+      form.reset();
     } catch (err) {
-      messageEl.textContent = "Something went wrong.";
-      messageEl.style.display = "block";
+      msg.style.color = "crimson";
+      msg.textContent = "❌ Could not subscribe. Try again.";
+      msg.style.display = "block";
     }
   });
 </script>
