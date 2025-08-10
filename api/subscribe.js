@@ -29,6 +29,7 @@ export default async function handler(req) {
     return new Response("Bad email", { status: 400 });
   }
 
+
   await redis.sadd("los:emails", email); // unique
   return new Response("OK", { status: 200 });
 }
