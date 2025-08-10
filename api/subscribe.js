@@ -1,4 +1,5 @@
 import { Redis } from "@upstash/redis";
+
 const redis = new Redis({
   url: process.env.KV_REST_API_URL,
   token: process.env.KV_REST_API_TOKEN,
@@ -20,15 +21,14 @@ export default async function handler(req) {
       const form = await req.formData();
       email = (form.get("email") || "").toString();
     }
-  } catch (_) {}
+  } catch {}
 
   email = email.trim().toLowerCase();
 
-  // more permissive check
+  // permissive check
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     return new Response("Bad email", { status: 400 });
   }
-
 
   await redis.sadd("los:emails", email); // unique
   return new Response("OK", { status: 200 });
